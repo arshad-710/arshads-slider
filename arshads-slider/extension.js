@@ -17,11 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function pollForWebflow() {
     const statusEl = document.getElementById('connection-status');
     let attempts = 0;
-    const maxAttempts = 30; // 7.5 seconds
+    const maxAttempts = 60; // 15 seconds
 
     const interval = setInterval(() => {
         attempts++;
-        if (typeof webflow !== 'undefined') {
+        // Check for webflow in all possible places
+        const wf = (typeof webflow !== 'undefined') ? webflow : (window.webflow ? window.webflow : null);
+
+        if (wf) {
             clearInterval(interval);
             isConnected = true;
             statusEl.innerText = "🟢 Connected to Webflow Designer";
@@ -32,7 +35,7 @@ function pollForWebflow() {
             clearInterval(interval);
             statusEl.innerText = "❌ Connection Failed (Is this Webflow?)";
             statusEl.style.color = "#ff4d4d";
-            console.error("Webflow API Connection Timeout");
+            console.error("Webflow API Connection Timeout. Checked 'webflow' and 'window.webflow'.");
         }
     }, 250);
 }
