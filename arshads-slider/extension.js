@@ -3,55 +3,49 @@
  * Main Logic for interacting with the Webflow Designer API
  */
 
-// Wait for Webflow to be ready
-window.addEventListener('load', () => {
-    console.log("Arshad's Slider Extension Initialized");
+// Global state for connection
+let isConnected = false;
+
+// 1. Initialize immediately (so buttons work)
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Arshad's Slider UI Ready");
+    initializeExtension();
     pollForWebflow();
 });
 
+// 2. Poll for the Webflow API object
 function pollForWebflow() {
+    const statusEl = document.getElementById('connection-status');
     let attempts = 0;
-    const maxAttempts = 20; // 5 seconds total
+    const maxAttempts = 30; // 7.5 seconds
+
     const interval = setInterval(() => {
         attempts++;
         if (typeof webflow !== 'undefined') {
             clearInterval(interval);
+            isConnected = true;
+            statusEl.innerText = "🟢 Connected to Webflow Designer";
+            statusEl.style.color = "#4ade80";
             console.log("Webflow API Connected");
-            initializeExtension();
+            setupSelectionListener();
         } else if (attempts >= maxAttempts) {
             clearInterval(interval);
+            statusEl.innerText = "❌ Connection Failed (Is this Webflow?)";
+            statusEl.style.color = "#ff4d4d";
             console.error("Webflow API Connection Timeout");
         }
     }, 250);
 }
 
+// 3. Setup Button Listeners immediately
 async function initializeExtension() {
     const createBtn = document.getElementById('create-slider');
     const updateBtn = document.getElementById('update-slider');
-    const form = document.getElementById('slider-form');
-
-    // Subscribe to selection changes to show "Update" button if a slider is selected
-    if (window.webflow) {
-        webflow.subscribe('selection', async (element) => {
-            if (element) {
-                const attributes = await element.getAttributes();
-                const isSlider = attributes.some(attr => attr.name === 'data-arshad-slider');
-                if (isSlider) {
-                    updateBtn.style.display = 'block';
-                    createBtn.style.display = 'none';
-                    // Optional: fill form with existing settings
-                    // loadSliderSettings(element);
-                } else {
-                    updateBtn.style.display = 'none';
-                    createBtn.style.display = 'block';
-                }
-            }
-        });
-    }
 
     createBtn.addEventListener('click', async () => {
-        if (typeof webflow === 'undefined') {
-            alert("🚀 ACTION REQUIRED: APP NOT CONNECTED\n\n1. If you just updated GitHub, wait 60 seconds.\n2. In Webflow Designer, press CTRL + R (or CMD + R) to refresh.\n3. Launch the App from the 'Apps' menu.");
+        console.log("Create Button Clicked");
+        if (!isConnected) {
+            alert("🚀 APP NOT CONNECTED YET\n\n1. Wait for the green '🟢 Connected' text at the top.\n2. In Webflow, press CTRL + SHIFT + R to force refresh.\n3. Make sure you are inside the Webflow Designer.");
             return;
         }
 
@@ -66,11 +60,39 @@ async function initializeExtension() {
     });
 
     updateBtn.addEventListener('click', async () => {
-        if (typeof webflow === 'undefined') return;
-        const element = await webflow.getSelectedElement();
+        if (!isConnected) return;
+        try {
+            const element = await webflow.getSelectedElement();
+            if (element) {
+                const config = getFormConfig();
+                await updateSliderInWebflow(element, config);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    });
+}
+
+// 4. Setup selection only after connected
+async function setupSelectionListener() {
+    const createBtn = document.getElementById('create-slider');
+    const updateBtn = document.getElementById('update-slider');
+
+    webflow.subscribe('selection', async (element) => {
         if (element) {
-            const config = getFormConfig();
-            await updateSliderInWebflow(element, config);
+            try {
+                const attributes = await element.getAttributes();
+                const isSlider = attributes.some(attr => attr.name === 'data-arshad-slider');
+                if (isSlider) {
+                    updateBtn.style.display = 'block';
+                    createBtn.style.display = 'none';
+                } else {
+                    updateBtn.style.display = 'none';
+                    createBtn.style.display = 'block';
+                }
+            } catch (e) {
+                console.warn("Selection skip:", e);
+            }
         }
     });
 }
@@ -193,53 +215,8 @@ async function createSliderInWebflow(config) {
     }
 }
 
-/**
- * Injects required Swiper CSS/JS into the page via an Embed element
- */
-async function injectRequiredScripts() {
-    // Check if script already exists on page
-    const root = await webflow.getRootElement();
-    const children = await root.getChildren();
-    const scriptExists = children.some(async (child) => {
-        const classes = await child.getAttributes();
-        return classes.some(attr => attr.name === 'class' && attr.value.includes('arshad-slider-scripts'));
-    });
-
-    if (scriptExists) return;
-
-    // Create Embed element
-    // Note: If webflow.elementPresets.Embed is not available, we use a custom code block injection if possible
-    // For this version, we will instruct the user or use a Div with a custom attribute that the init script handles
-
-    const setupInfo = `
-    <!-- Arshad's Slider Setup -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <script>
-        // Inline Swiper Init Logic (Simplified for Embed)
-        (function() {
-            function init() {
-                document.querySelectorAll('.arshad-slide-container.swiper').forEach(el => {
-                    if (el.swiper) return;
-                    const config = JSON.parse(el.getAttribute('data-swiper-config'));
-                    new Swiper(el, {
-                        ...config,
-                        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                        pagination: { el: '.swiper-pagination', clickable: true }
-                    });
-                });
-            }
-            window.addEventListener('load', init);
-            // Re-init for Webflow interactions/tabs
-            setInterval(init, 2000);
-        })();
-    </script>
-    `;
-
-    console.log("Arshad's Slider: Please ensure the initialization script is added to your project settings.");
-}
-
-async function findElementByClass(className) {
-    // Utility to find if element already exists
-    return null; // Simplified for now
+async function updateSliderInWebflow(element, config) {
+    // Basic update logic: update the config attribute
+    await element.setAttribute('data-swiper-config', JSON.stringify(config));
+    alert("Slider settings updated! Refresh the page to see changes in preview.");
 }
