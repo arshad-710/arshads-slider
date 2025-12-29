@@ -35,12 +35,15 @@ async function initializeExtension() {
 
     createBtn.addEventListener('click', async () => {
         try {
+            if (typeof webflow === 'undefined') {
+                throw new Error("Webflow API not found. If you are testing via GitHub, ensure the URL is correct and script is loaded.");
+            }
             const config = getFormConfig();
             await createSliderInWebflow(config);
             console.log("Slider created successfully!");
         } catch (error) {
-            console.error("Error creating slider:", error);
-            alert("Failed to create slider. Ensure you are in the Webflow Designer.");
+            console.error("Arshad Slider Error:", error);
+            alert("Error: " + error.message);
         }
     });
 
