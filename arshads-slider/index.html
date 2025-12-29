@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arshad's Slider - Webflow App</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Webflow API -->
-    <script src="https://cdn.jsdelivr.net/npm/@webflow/designer-extension-api@1/dist/index.js"></script>
+    <!-- Webflow API - Primary CDN with Tracking -->
+    <script src="https://unpkg.com/@webflow/designer-extension-api@1/dist/index.js"
+        onload="console.log('API Script Loaded Successfully')"
+        onerror="alert('CRITICAL ERROR: The Webflow API script failed to load. Please check your internet or if GitHub is blocking the CDN.')">
+        </script>
 </head>
 
 <body>
