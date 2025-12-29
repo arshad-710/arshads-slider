@@ -106,29 +106,29 @@ async function createSliderInWebflow(config) {
     const selectedElement = await webflow.getSelectedElement();
 
     // Create Main Wrapper
-    const mainWrapper = await webflow.createDOM('div');
-    mainWrapper.setStyles({
+    const mainWrapper = await webflow.createDOM(webflow.elementPresets.DivBlock);
+    await mainWrapper.setStyles({
         position: 'relative',
         width: '100%',
         margin: '20px 0'
     });
-    mainWrapper.setAttribute('class', `arshad-slider-wrapper-main ${sliderId}`);
+    await mainWrapper.setAttribute('class', `arshad-slider-wrapper-main ${sliderId}`);
 
     // Create Swiper Container
-    const container = await webflow.createDOM('div');
-    container.setAttribute('class', 'arshad-slide-container swiper');
-    container.setAttribute('data-arshad-slider', 'true');
-    container.setAttribute('data-swiper-config', JSON.stringify(config));
+    const container = await webflow.createDOM(webflow.elementPresets.DivBlock);
+    await container.setAttribute('class', 'arshad-slide-container swiper');
+    await container.setAttribute('data-arshad-slider', 'true');
+    await container.setAttribute('data-swiper-config', JSON.stringify(config));
 
     // Create Swiper Wrapper
-    const wrapper = await webflow.createDOM('div');
-    wrapper.setAttribute('class', 'arshad-slide-wrapper swiper-wrapper');
+    const wrapper = await webflow.createDOM(webflow.elementPresets.DivBlock);
+    await wrapper.setAttribute('class', 'arshad-slide-wrapper swiper-wrapper');
 
     // Create 3 dummy slides
     for (let i = 1; i <= 3; i++) {
-        const slide = await webflow.createDOM('div');
-        slide.setAttribute('class', 'arshad-slide-item swiper-slide');
-        slide.setStyles({
+        const slide = await webflow.createDOM(webflow.elementPresets.DivBlock);
+        await slide.setAttribute('class', 'arshad-slide-item swiper-slide');
+        await slide.setStyles({
             height: '300px',
             backgroundColor: '#222',
             display: 'flex',
@@ -138,8 +138,8 @@ async function createSliderInWebflow(config) {
             fontSize: '24px',
             borderRadius: '8px'
         });
-        const text = await webflow.createDOM('div');
-        text.setTextContent(`Arshad Slide ${i}`);
+        const text = await webflow.createDOM(webflow.elementPresets.DivBlock);
+        await text.setTextContent(`Arshad Slide ${i}`);
         await slide.append(text);
         await wrapper.append(slide);
     }
@@ -148,17 +148,17 @@ async function createSliderInWebflow(config) {
 
     // Add Pagination if enabled
     if (config.pagination) {
-        const pag = await webflow.createDOM('div');
-        pag.setAttribute('class', 'arshad-slide-pagination swiper-pagination');
+        const pag = await webflow.createDOM(webflow.elementPresets.DivBlock);
+        await pag.setAttribute('class', 'arshad-slide-pagination swiper-pagination');
         await container.append(pag);
     }
 
     // Add Navigation if enabled
     if (config.navigation) {
-        const next = await webflow.createDOM('div');
-        next.setAttribute('class', 'arshad-slide-next swiper-button-next');
-        const prev = await webflow.createDOM('div');
-        prev.setAttribute('class', 'arshad-slide-prev swiper-button-prev');
+        const next = await webflow.createDOM(webflow.elementPresets.DivBlock);
+        await next.setAttribute('class', 'arshad-slide-next swiper-button-next');
+        const prev = await webflow.createDOM(webflow.elementPresets.DivBlock);
+        await prev.setAttribute('class', 'arshad-slide-prev swiper-button-prev');
         await container.append(next);
         await container.append(prev);
     }
@@ -172,9 +172,6 @@ async function createSliderInWebflow(config) {
         const root = await webflow.getRootElement();
         await root.append(mainWrapper);
     }
-
-    // Add the initialization script too (once per page or via site settings)
-    await injectRequiredScripts();
 }
 
 /**
