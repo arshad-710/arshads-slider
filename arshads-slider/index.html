@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arshad's Slider - Webflow App</title>
     <link rel="stylesheet" href="style.css">
+    <!-- CRITICAL: Webflow Designer API Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@webflow/designer-extension-api@1/dist/index.js"></script>
 </head>
 
 <body>
@@ -16,11 +18,11 @@
         </header>
 
         <div class="tabs">
-            <div class="tab active" data-tab="general">General</div>
-            <div class="tab" data-tab="navigation">Nav & Pagination</div>
-            <div class="tab" data-tab="effects">Effects</div>
-            <div class="tab" data-tab="responsive">Responsive</div>
-            <div class="tab" data-tab="guide">Guide</div>
+            <div class="tab active" data-tab="general">Gen</div>
+            <div class="tab" data-tab="navigation">Nav</div>
+            <div class="tab" data-tab="effects">FX</div>
+            <div class="tab" data-tab="responsive">Resp</div>
+            <div class="tab" data-tab="guide">Setup</div>
         </div>
 
         <form id="slider-form">
