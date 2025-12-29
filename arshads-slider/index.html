@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arshad's Slider - Webflow App</title>
     <link rel="stylesheet" href="style.css">
-    <!-- CRITICAL: Webflow Designer API Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@webflow/designer-extension-api@1/dist/index.js"></script>
 </head>
 
 <body>
@@ -231,7 +229,11 @@
         </div>
     </div>
 
-    <!-- Script to handle UI logic (tabs and button clicks) -->
+    </div>
+
+    <!-- Webflow API -->
+    <script src="https://cdn.jsdelivr.net/npm/@webflow/designer-extension-api@1/dist/index.js"></script>
+
     <script>
         // Tab system
         const tabs = document.querySelectorAll('.tab');
@@ -247,7 +249,7 @@
             });
         });
 
-        // Local Storage for Hosting URL
+        // Initialize Hosting URL from storage
         const hostingInput = document.getElementById('hosting-url');
         const savedUrl = localStorage.getItem('arshad-hosting-url');
         if (savedUrl) hostingInput.value = savedUrl;
@@ -267,6 +269,17 @@
             navigator.clipboard.writeText(script).then(() => {
                 alert("Site-wide script copied! Paste this into Webflow Footer Code.");
             });
+        });
+
+        // API Status Check
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (typeof webflow !== 'undefined') {
+                    console.log("Webflow API Ready");
+                } else {
+                    console.error("Webflow API not detected. Ensure you are in the Webflow Designer.");
+                }
+            }, 1000);
         });
     </script>
     <script src="extension.js"></script>
