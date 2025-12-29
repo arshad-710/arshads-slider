@@ -34,10 +34,12 @@ async function initializeExtension() {
     }
 
     createBtn.addEventListener('click', async () => {
+        if (typeof webflow === 'undefined') {
+            alert("⚠️ Webflow Connection Missing!\n\nThis app ONLY works inside the Webflow Designer. It cannot create sliders when opened in a regular browser tab.\n\nTo use it:\n1. Open your Webflow Project.\n2. Go to the 'Apps' menu.\n3. Launch 'Arshad's Slider' from there.");
+            return;
+        }
+
         try {
-            if (typeof webflow === 'undefined') {
-                throw new Error("Webflow API not found. If you are testing via GitHub, ensure the URL is correct and script is loaded.");
-            }
             const config = getFormConfig();
             await createSliderInWebflow(config);
             console.log("Slider created successfully!");
