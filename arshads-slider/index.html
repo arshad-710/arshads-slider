@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arshad's Slider - Webflow App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Arshad’s Slider <span class="badge">Pro</span></h1>
+            <div class="subtitle">By Muhammad Arshad Ajmal</div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="general">General</div>
+            <div class="tab" data-tab="navigation">Nav & Pagination</div>
+            <div class="tab" data-tab="effects">Effects</div>
+            <div class="tab" data-tab="responsive">Responsive</div>
+            <div class="tab" data-tab="guide">Guide</div>
+        </div>
+
+        <form id="slider-form">
+            <!-- General Settings -->
+            <div id="general" class="tab-content active">
+                <div class="section">
+                    <div class="section-title">Core Options</div>
+                    <div class="form-group">
+                        <label for="loop">Loop Mode <span class="info-icon"
+                                title="Continuous loop mode">?</span></label>
+                        <select id="loop">
+                            <option value="true">Enabled</option>
+                            <option value="false" selected>Disabled</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="speed">Speed (ms)</label>
+                                <input type="number" id="speed" value="300" step="50">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="initialSlide">Initial Slide</label>
+                                <input type="number" id="initialSlide" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="centeredSlides">Centered Slides</label>
+                        <select id="centeredSlides">
+                            <option value="false" selected>No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Autoplay</div>
+                    <div class="form-group">
+                        <label for="autoplay">Enable Autoplay</label>
+                        <select id="autoplay-enabled">
+                            <option value="false" selected>No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="autoplay-delay">Delay (ms)</label>
+                                <input type="number" id="autoplay-delay" value="3000">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="pauseOnHover">Pause on Hover</label>
+                                <select id="pauseOnHover">
+                                    <option value="true" selected>Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation & Pagination -->
+            <div id="navigation" class="tab-content">
+                <div class="section">
+                    <div class="section-title">Navigation Arrows</div>
+                    <div class="form-group">
+                        <label for="nav-enabled">Show Arrows</label>
+                        <select id="nav-enabled">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Pagination</div>
+                    <div class="form-group">
+                        <label for="pag-enabled">Show Pagination</label>
+                        <select id="pag-enabled">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pag-type">Type</label>
+                        <select id="pag-type">
+                            <option value="bullets" selected>Bullets</option>
+                            <option value="fraction">Fraction</option>
+                            <option value="progressbar">Progress Bar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pag-clickable">Clickable Bullets</label>
+                        <select id="pag-clickable">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Effects -->
+            <div id="effects" class="tab-content">
+                <div class="section">
+                    <div class="section-title">Slide Effect</div>
+                    <div class="form-group">
+                        <label for="effect">Transition Effect</label>
+                        <select id="effect">
+                            <option value="slide" selected>Slide (Default)</option>
+                            <option value="fade">Fade</option>
+                            <option value="cube">Cube (3D)</option>
+                            <option value="coverflow">Coverflow (3D)</option>
+                            <option value="flip">Flip (3D)</option>
+                            <option value="cards">Cards</option>
+                            <option value="creative">Creative</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="grabCursor">Grab Cursor</label>
+                        <select id="grabCursor">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide -->
+            <div id="guide" class="tab-content">
+                <div class="section">
+                    <div class="section-title">Step 1: Hosting (Zero Cost)</div>
+                    <p style="font-size: 12px; color: var(--text-secondary);">
+                        1. Upload this folder to a <b>GitHub Repository</b>.<br>
+                        2. Enable <b>GitHub Pages</b> in Repository Settings.<br>
+                        3. Enter your Public URL below to update the script:
+                    </p>
+                    <input type="text" id="hosting-url" placeholder="https://username.github.io/repo-name"
+                        style="margin-bottom: 8px;">
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Step 2: Webflow Setup</div>
+                    <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
+                        Copy the script below and paste it into <b>Project Settings > Custom Code > Footer Code</b>.
+                        This only needs to be done once per project.
+                    </p>
+                    <button type="button" class="btn btn-secondary" id="copy-script">Copy Site-Wide Script</button>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Step 3: CMS Support</div>
+                    <p style="font-size: 12px; color: var(--text-secondary);">
+                        1. Place a <b>Collection List</b> inside <code>arshad-slide-wrapper</code>.<br>
+                        2. Give <b>Collection Item</b> the class: <code>arshad-slide-item swiper-slide</code>.<br>
+                    </p>
+                </div>
+            </div>
+            <div id="responsive" class="tab-content">
+                <div class="section">
+                    <div class="section-title">Slides Per View</div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Desktop (1200+)</label>
+                            <input type="number" id="spv-desktop" value="3" min="1">
+                        </div>
+                        <div class="col">
+                            <label>Tablet (768+)</label>
+                            <input type="number" id="spv-tablet" value="2" min="1">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col">
+                            <label>Mobile (480+)</label>
+                            <input type="number" id="spv-mobile" value="1" min="1">
+                        </div>
+                        <div class="col">
+                            <label>Spacing (px)</label>
+                            <input type="number" id="spaceBetween" value="30">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn" id="create-slider">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 3.33334V12.6667" stroke="white" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M3.33333 8H12.6667" stroke="white" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                Insert Arshad's Slider
+            </button>
+
+            <button type="button" class="btn btn-secondary" id="update-slider" style="display: none;">
+                Update Selected Slider
+            </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="#" class="subtitle" style="text-decoration: none;">View Documentation</a>
+        </div>
+    </div>
+
+    <!-- Script to handle UI logic (tabs and button clicks) -->
+    <script>
+        // Tab system
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Local Storage for Hosting URL
+        const hostingInput = document.getElementById('hosting-url');
+        const savedUrl = localStorage.getItem('arshad-hosting-url');
+        if (savedUrl) hostingInput.value = savedUrl;
+
+        hostingInput.addEventListener('input', () => {
+            localStorage.setItem('arshad-hosting-url', hostingInput.value);
+        });
+
+        // Copy Script
+        document.getElementById('copy-script').addEventListener('click', () => {
+            const baseUrl = hostingInput.value.replace(/\/$/, "");
+            if (!baseUrl) {
+                alert("Please enter your GitHub Pages URL in Step 1 first!");
+                return;
+            }
+            const script = `<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"><\/script>\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">\n<script src="${baseUrl}/swiper-init.js"><\/script>`;
+            navigator.clipboard.writeText(script).then(() => {
+                alert("Site-wide script copied! Paste this into Webflow Footer Code.");
+            });
+        });
+    </script>
+    <script src="extension.js"></script>
+</body>
+
+</html>
